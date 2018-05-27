@@ -2,10 +2,21 @@ package com.nelioalves.cursomc.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+//ANOTAÇÃO PARA INDICAR QUE É UMA CLASSE BASEADA EM JPA
+@Entity
 public class Categoria implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	//ANOTAÇÃO QUE INDICA QUE É A PRIMARY KEY DESTA ENTIDADE DE BANCO
+	@Id
+	//ANOTAÇÃO QUE INDICA QUE A CHAVE PRIMARYA SERÁ GERÊNCIADA PELO SPRING
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	
