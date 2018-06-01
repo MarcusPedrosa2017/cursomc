@@ -13,11 +13,13 @@ import com.nelioalves.cursomc.repositories.CategoriaRepository;
 @Service
 public class CategoriaService {
 	
-	/*ANOTAÇÃO DO SPRING QUE INJETA UM OBJETO CategoriaRepository AO INSTÂNCIAR UM OBJETO
-	 * CategoriaService 
-	*/ 
-	@Autowired 
+	@Autowired
 	private CategoriaRepository repo;
+	
+	public CategoriaService(CategoriaRepository repo) {
+		this.repo = repo;
+	}
+	
 	
 	public List<Categoria> listar() {
 		List<Categoria> lista = new ArrayList<>();		
