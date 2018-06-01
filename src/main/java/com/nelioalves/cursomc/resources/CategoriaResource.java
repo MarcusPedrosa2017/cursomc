@@ -1,5 +1,7 @@
 package com.nelioalves.cursomc.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,11 @@ public class CategoriaResource {
 	
 	@Autowired
 	private CategoriaService service;
+	
+	@RequestMapping(value="/listar", method=RequestMethod.GET)
+	public List<Categoria> listar(){
+		return service.listar();			
+	}
 	
 	/*
 	 * FOI INCLUÍDO O PARÂMETRO id PARA REALIZAR A BUSCA E FOI ACRESCENTADA A ANOTAÇÃO @PathVariable PARA QUE O VALOR DO ID SEJA PASSADO 
