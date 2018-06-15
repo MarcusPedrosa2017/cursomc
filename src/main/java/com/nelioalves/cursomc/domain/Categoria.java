@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 //ANOTAÇÃO PARA INDICAR QUE É UMA CLASSE BASEADA EM JPA
 @Entity
 public class Categoria implements Serializable{
@@ -26,7 +28,11 @@ public class Categoria implements Serializable{
 	/*
 	 *COMO JA FOI FEITO O MAPEAMENTO DO RELACIONAMENTO NA TABELA PRODUTO, NAO E NECESSARIO FAZER AQUI NOVAMENTE, BASTA REFERENCIA O ATRIBUTO
 	 *NO QUAL FOI MAPEADO NA OUTRA CLASSE COM PELO ATRIBUTO mappedBy NA ASSOCIACAO @ManyToMany 
+	 *
+	 *A ANOTACAO @JsonManagedReference SERVE PARA EVITAR A REFERENCIA CIRCULAR NA HORA DE SERIALIZAR PARA JSON O RETORNO, ELA TRABALHA EM 
+	 *CONJUNTO COM A ANOTACAO @JsonBackReference. NO ATRIBUTO DE RELACIONAMENTO DA OUTRA CLASSE  
 	*/
+	@JsonManagedReference
 	@ManyToMany(mappedBy="categorias")
 	private List<Produto> produtos = new ArrayList<>();
 	

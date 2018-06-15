@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Produto implements Serializable{
 	
@@ -28,12 +30,15 @@ public class Produto implements Serializable{
 	/*
 	 * MAPEAMENTO DE RELACIONAMENTO, MUITOS PARA MUITOS, EXISTIRA UMA TABELA INTERMEDIARIA CAHAMADA PROCUTO_CATEGORIA QUE IRA JUNTAR AS 
 	 * DUAS TABELAS	 * 
+	 * A ANOTACAO @JsonManagedReference SERVE PARA EVITAR A REFERENCIA CIRCULAR NA HORA DE SERIALIZAR PARA JSON O RETORNO, ELA TRABALHA EM 
+	 * CONJUNTO COM A ANOTACAO @JsonBackReference. NO ATRIBUTO DE RELACIONAMENTO DA OUTRA CLASSE  
 	 */
+	@JsonBackReference
 	@ManyToMany
 	@JoinTable(name="PRODUTO_CATEGORIA",
 	joinColumns = @JoinColumn(name = "produto_id"),
 	inverseJoinColumns = @JoinColumn(name = "categoria_id")	
-	)
+	)	
 	private List<Categoria> categorias = new ArrayList<>();
 	
 	public Produto() {		
