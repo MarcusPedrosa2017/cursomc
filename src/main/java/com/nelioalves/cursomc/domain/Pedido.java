@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Pedido implements Serializable{	
 	
@@ -23,13 +26,17 @@ public class Pedido implements Serializable{
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private Integer id;
+	
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date instante;
 	
 	//foi usada a anotacao @OneToOne para mostrar a associacao e o cascade pois o JPA precisa, e foi mapeado para o atributo pedido
 	//da classe Pagamento, ESTUDAR ISSO DEPOIS
+	@JsonManagedReference
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;

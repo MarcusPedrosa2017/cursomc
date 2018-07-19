@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido implements Serializable{
 	
@@ -13,7 +15,10 @@ public class ItemPedido implements Serializable{
 	/*
 	 * atributo da ItemPedidoPk que faz a junção de muitos para muitos entre a tabela Pedido e ItemPedido
 	 * a anotacao usada @EmbeddedId, pois foi usado um tipo auxiliar(classe) para ser a chave composta desta tabela 
+	 * 
+	 * a antation @JsonIgonre foi colocada para que essa classe nao seja Serializada na resposta do endpoint REST
 	*/
+	@JsonIgnore
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
 	
@@ -39,11 +44,14 @@ public class ItemPedido implements Serializable{
 
 	/*
 	 * criamos os getters para ter acesso direto sem ter que apontar o id antes
+	 * 
+	 * temos que colocar a anotacao para ignorar, pois e GET de acesso direto a outra classe, fica ciclico
 	*/
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
-	
+		
 	public Produto getProduto() {
 		return id.getProduto();
 	}

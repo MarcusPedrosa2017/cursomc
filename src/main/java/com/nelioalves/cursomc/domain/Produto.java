@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Produto implements Serializable{
@@ -46,7 +47,10 @@ public class Produto implements Serializable{
 	
 	/*
 	 * relacionamento feito exatamente como na entidade Pedido 
+	 * 
+	 * foi colocado para ignorar @JsonIgnore, pois a partir do Produto nao queremos ver os ItemPedido associados, somente o inverso
 	*/
+	@JsonIgnore
 	@OneToMany(mappedBy="id.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
@@ -60,6 +64,11 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
+	/*
+	 * como tudo que e GET na e serializado por padrao, foi colocado para ignorar, para que nao haja referencia ciclica entre as classes 
+	 * e entidades
+	*/
+	@JsonIgnore
 	public List<Pedido> getPedidos(){
 		List<Pedido> lista = new ArrayList<>();
 		for(ItemPedido x : itens) {
