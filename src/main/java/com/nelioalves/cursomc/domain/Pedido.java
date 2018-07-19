@@ -2,6 +2,8 @@ package com.nelioalves.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -34,6 +37,15 @@ public class Pedido implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega;
+	
+	/*
+	 * como foi mapeado o relacionamento na tabela ItemPedido, fazemos a associao deste lado com mappedBy passando o atributo que faz o 
+	 * relacionamento na outra classe, porem neste caso temos um Id na classe ItemPedido que do tipo ItemPedidoPK, que e a classe que 
+	 * faz o relacionamento, ela por sua vez e quem tem o tipo Produto e Pedido, por isso foi mapeado para o atributo Id da ItemPedido
+	 * , visando acessar os atributos do tipo Pedido e Produto que ela possui 
+	*/
+	@OneToMany(mappedBy="id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {				
 	}
@@ -86,7 +98,16 @@ public class Pedido implements Serializable{
 	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
 
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -110,7 +131,6 @@ public class Pedido implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
+	}	
 	
 }
