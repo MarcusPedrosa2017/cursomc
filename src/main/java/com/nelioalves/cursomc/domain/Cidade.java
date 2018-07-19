@@ -21,7 +21,10 @@ public class Cidade implements Serializable{
 	private Integer id;
 	private String nome;
 	
-	@JsonManagedReference
+	/*
+	 @JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
+	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
+	*/
 	@ManyToOne
 	@JoinColumn(name="estado_id")
 	private Estado estado;

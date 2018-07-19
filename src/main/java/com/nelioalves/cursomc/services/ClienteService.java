@@ -2,6 +2,7 @@ package com.nelioalves.cursomc.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,9 +30,15 @@ public class ClienteService {
 	}
 	
 	public Cliente buscar(Integer id) {
+		
 		Optional<Cliente> obj = repo.findById(id);
-		if(Objects.isNull(obj)){
-			throw new ObjectsNotFoundException("Objeto não econtrado! ID: " + id + ", Tipo: " + Cliente.class.getName());
+		
+		try{
+			
+			if(Objects.isNull(obj.get())) {}
+			
+		}catch(NoSuchElementException e) {
+			throw new ObjectsNotFoundException("Objeto não econtrado! ID: " + id + ", Tipo: " + Cliente.class.getName());	
 		}
 		return obj.get();//DEVIDO AO CONTAINER Optional E NECESSARIO PEGAR O OBJ PELO GET
 	}

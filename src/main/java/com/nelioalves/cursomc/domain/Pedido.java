@@ -30,13 +30,19 @@ public class Pedido implements Serializable{
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date instante;
 	
-	//foi usada a anotacao @OneToOne para mostrar a associacao e o cascade pois o JPA precisa, e foi mapeado para o atributo pedido
-	//da classe Pagamento, ESTUDAR ISSO DEPOIS
-	@JsonManagedReference
+	/*
+	 * foi usada a anotacao @OneToOne para mostrar a associacao e o cascade pois o JPA precisa, e foi mapeado para o atributo pedido
+	 * da classe Pagamento, ESTUDAR ISSO DEPOIS
+	 * @JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
+	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
+	*/
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
-	@JsonManagedReference
+	/*
+	 * @JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
+	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
+	*/
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;

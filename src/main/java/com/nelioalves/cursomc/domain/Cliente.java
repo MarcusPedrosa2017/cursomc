@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nelioalves.cursomc.domain.enums.TipoCliente;
 
@@ -32,7 +33,10 @@ public class Cliente implements Serializable{
 	//foi alterado de TipoCliente para Integer, para armazenar so o codigo, por isso mudamos o get e set deles
 	private Integer tipo;
 	
-	@JsonManagedReference
+	/*
+	@JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
+	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
+	*/
 	@OneToMany(mappedBy="cliente")
 	private List<Endereco> endrecos = new ArrayList<>();
 	
@@ -40,7 +44,7 @@ public class Cliente implements Serializable{
 	@CollectionTable(name="TELEFONE")
 	private Set<String> telefone = new HashSet<>();
 	
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy="cliente")	
 	private List<Pedido> pedidos = new ArrayList<>();
 	

@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -37,7 +36,7 @@ public class Produto implements Serializable{
 	 * A ANOTACAO @JsonManagedReference SERVE PARA EVITAR A REFERENCIA CIRCULAR NA HORA DE SERIALIZAR PARA JSON O RETORNO, ELA TRABALHA EM 
 	 * CONJUNTO COM A ANOTACAO @JsonBackReference. NO ATRIBUTO DE RELACIONAMENTO DA OUTRA CLASSE  
 	 */
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="PRODUTO_CATEGORIA",
 	joinColumns = @JoinColumn(name = "produto_id"),

@@ -1,5 +1,8 @@
 package com.nelioalves.cursomc.resources.exception;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,11 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(ObjectsNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(ObjectsNotFoundException e, HttpServletRequest request){
 		
-		StandardError error =  new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());		
+		Long currentDiteTime = System.currentTimeMillis();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		Date currentDate = new Date(currentDiteTime);
+		
+		StandardError error =  new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), currentDate);		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
 }
