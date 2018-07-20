@@ -23,7 +23,7 @@ public class PedidoService {
 		this.repo = repo;
 	}
 	
-	public List<Pedido> list() {
+	public List<Pedido> findAll() {
 		List<Pedido> lista = new ArrayList<>();
 		lista = repo.findAll();
 		return lista;

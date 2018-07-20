@@ -23,7 +23,7 @@ public class ClienteService {
 		this.repo = repo;
 	}
 	
-	public List<Cliente> list() {
+	public List<Cliente> findAll() {
 		List<Cliente> lista = new ArrayList<>();
 		lista = repo.findAll();
 		return lista;

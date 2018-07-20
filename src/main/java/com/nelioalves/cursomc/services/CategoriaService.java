@@ -26,7 +26,7 @@ public class CategoriaService {
 	}
 	
 	
-	public List<Categoria> list() {
+	public List<Categoria> findAll() {
 		List<Categoria> lista = new ArrayList<>();		
 		lista = repo.findAll();
 		return lista;	
@@ -61,11 +61,11 @@ public class CategoriaService {
 		try {
 			repo.deleteById(id);
 		/*
-		 * caso ocorra uma ConstraintViolationException do pacote: 
-		 * import org.hibernate.exception.ConstraintViolationException
+		 * caso ocorra uma DataIntegrityViolationException do pacote: 
+		 * org.springframework.dao.DataIntegrityViolationException;
 		 * 
 		 * lanço uma do meu pacote de excessao:
-		 * com.nelioalves.cursomc.services.exception.DataConstraintViolationException
+		 * com.nelioalves.cursomc.services.exception.DataIntegrityException
 		 */
 		}catch(DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluír uma Categoria que possuí Produtos Associados!");
