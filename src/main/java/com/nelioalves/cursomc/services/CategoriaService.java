@@ -7,10 +7,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.repositories.CategoriaRepository;
+import com.nelioalves.cursomc.services.exception.DataIntegrityException;
 import com.nelioalves.cursomc.services.exception.ObjectsNotFoundException;
 
 @Service
@@ -52,5 +54,22 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId());
 		return repo.save(obj);
+	}
+	
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		/*
+		 * caso ocorra uma ConstraintViolationException do pacote: 
+		 * import org.hibernate.exception.ConstraintViolationException
+		 * 
+		 * lanço uma do meu pacote de excessao:
+		 * com.nelioalves.cursomc.services.exception.DataConstraintViolationException
+		 */
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluír uma Categoria que possuí Produtos Associados!");
+		}
+		
 	}
 }

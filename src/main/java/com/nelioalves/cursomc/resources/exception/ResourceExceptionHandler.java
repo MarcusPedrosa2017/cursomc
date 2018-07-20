@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.nelioalves.cursomc.services.exception.DataIntegrityException;
 import com.nelioalves.cursomc.services.exception.ObjectsNotFoundException;
 
 /*
@@ -28,4 +29,17 @@ public class ResourceExceptionHandler {
 		StandardError error =  new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), currentDate);		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
+	
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrityException(DataIntegrityException e, HttpServletRequest request){
+		
+		Long currentDiteTime = System.currentTimeMillis();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		Date currentDate = new Date(currentDiteTime);
+		
+		StandardError error =  new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), currentDate);		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}	
+	
+	
 }
