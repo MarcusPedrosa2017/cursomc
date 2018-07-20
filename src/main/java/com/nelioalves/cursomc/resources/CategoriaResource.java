@@ -24,8 +24,8 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(value="/listar", method=RequestMethod.GET)
-	public List<Categoria> listar(){
-		return service.listar();			
+	public List<Categoria> list(){
+		return service.list();			
 	}
 	
 	/*
@@ -33,8 +33,8 @@ public class CategoriaResource {
 	 * PARA O MÉTODO COM PARÂMETRO 
 	*/
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id){
-		Categoria obj = service.buscar(id);
+	public ResponseEntity<Categoria> find(@PathVariable Integer id){
+		Categoria obj = service.find(id);
 		/*
 		 * FOI RETORNADO UM ResponseEntity QUE RETORNA UM HTML TRATADO COM O OBJETO DENTRO QUE ESTAMOS INCLUÍNDO NO BODY, QUANDO
 		 *  FOR UM RETORNO OK
@@ -51,6 +51,13 @@ public class CategoriaResource {
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		//retorna a uri acima no ResposeEntity
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 }
 

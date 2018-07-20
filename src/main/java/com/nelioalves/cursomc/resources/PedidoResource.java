@@ -20,8 +20,8 @@ public class PedidoResource {
 	private PedidoService service;
 	
 	@RequestMapping(value="/listar", method=RequestMethod.GET)
-	public List<Pedido> listar(){
-		return service.listar();			
+	public List<Pedido> list(){
+		return service.list();			
 	}
 	
 	/*
@@ -29,8 +29,8 @@ public class PedidoResource {
 	 * PARA O MÉTODO COM PARÂMETRO 
 	*/
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id){
-		Pedido obj = service.buscar(id);
+	public ResponseEntity<Pedido> find(@PathVariable Integer id){
+		Pedido obj = service.find(id);
 		/*
 		 * FOI RETORNADO UM ResponseEntity QUE RETORNA UM HTML TRATADO COM O OBJETO DENTRO QUE ESTAMOS INCLUÍNDO NO BODY, QUANDO
 		 *  FOR UM RETORNO OK

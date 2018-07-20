@@ -23,13 +23,13 @@ public class ClienteService {
 		this.repo = repo;
 	}
 	
-	public List<Cliente> listar() {
+	public List<Cliente> list() {
 		List<Cliente> lista = new ArrayList<>();
 		lista = repo.findAll();
 		return lista;
 	}
 	
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		
 		Optional<Cliente> obj = repo.findById(id);
 		

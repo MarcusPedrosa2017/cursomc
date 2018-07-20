@@ -24,13 +24,13 @@ public class CategoriaService {
 	}
 	
 	
-	public List<Categoria> listar() {
+	public List<Categoria> list() {
 		List<Categoria> lista = new ArrayList<>();		
 		lista = repo.findAll();
 		return lista;	
 	}
 	
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		
 		Optional<Categoria> obj = repo.findById(id);
 		
@@ -46,6 +46,11 @@ public class CategoriaService {
 	
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
+		return repo.save(obj);
+	}
+	
+	public Categoria update(Categoria obj) {
+		find(obj.getId());
 		return repo.save(obj);
 	}
 }

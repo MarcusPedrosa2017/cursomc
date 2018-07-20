@@ -23,13 +23,13 @@ public class PedidoService {
 		this.repo = repo;
 	}
 	
-	public List<Pedido> listar() {
+	public List<Pedido> list() {
 		List<Pedido> lista = new ArrayList<>();
 		lista = repo.findAll();
 		return lista;
 	}
 	
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		
 		Optional<Pedido> obj = repo.findById(id);
 		
