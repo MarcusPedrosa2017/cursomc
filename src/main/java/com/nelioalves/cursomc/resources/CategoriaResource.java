@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +52,12 @@ public class CategoriaResource {
 		
 	}
 	
+	/*
+	 * FOI INCLUIDA A ANOTACAO @Valid PARA PODER VALIDAR OS CAMPOS DE ACORDO COM AS ANOTAÇOES INCLUÍDAS NO DTO
+	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDTO){
+		Categoria obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);		
 		//pega a uri do recurso request atual
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -61,7 +67,8 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id){
+		Categoria obj =  service.fromDTO(objDto);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
@@ -73,6 +80,9 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	/*
+	 * metodo que retorna a lista PAGINADA de categorias de acordo com os parametros passados no GET
+	*/
 	@RequestMapping(value="/page", method=RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(value="page", defaultValue="0") Integer page,
