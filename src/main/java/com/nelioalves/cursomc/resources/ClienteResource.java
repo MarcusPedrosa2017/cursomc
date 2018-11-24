@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nelioalves.cursomc.domain.Cliente;
-import com.nelioalves.cursomc.dto.CategoriaDTO;
 import com.nelioalves.cursomc.dto.ClienteDTO;
+import com.nelioalves.cursomc.dto.ClienteNewDTO;
 import com.nelioalves.cursomc.services.ClienteService;
 
 @RestController
@@ -57,7 +57,7 @@ public class ClienteResource {
 	 * FOI INCLUIDA A ANOTACAO @Valid PARA PODER VALIDAR OS CAMPOS DE ACORDO COM AS ANOTAÇOES INCLUÍDAS NO DTO
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDTO){
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO){
 		Cliente obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);		
 		//pega a uri do recurso request atual
