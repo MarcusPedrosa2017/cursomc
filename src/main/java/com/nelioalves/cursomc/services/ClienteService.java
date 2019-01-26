@@ -87,7 +87,7 @@ public class ClienteService {
 		 * com.nelioalves.cursomc.services.exception.DataIntegrityException
 		 */
 		}catch(DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluír uma Cliente que possuí Entidades Associadas!");
+			throw new DataIntegrityException("Não é possível excluír um Cliente que possuí Pedidos Associados!");
 		}
 		
 	}

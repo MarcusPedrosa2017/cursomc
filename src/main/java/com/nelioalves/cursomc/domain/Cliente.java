@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -36,8 +37,11 @@ public class Cliente implements Serializable{
 	/*
 	@JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
 	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
+	
+	FOI INCLUIDA O ATRIBUTO cascade PARA QUE QUANDO OCORRER UMA DELECAO DE CLIENTE, O SPRING FACA O DELETE DE TODOS OS ENDERECOS
+	ASSOCIACOES AUTOMATICAMENTE 
 	*/
-	@OneToMany(mappedBy="cliente")
+	@OneToMany(mappedBy="cliente", cascade=CascadeType.ALL)
 	private List<Endereco> endrecos = new ArrayList<>();
 	
 	@ElementCollection
