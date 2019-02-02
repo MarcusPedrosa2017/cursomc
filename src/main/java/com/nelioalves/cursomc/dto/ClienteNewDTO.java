@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.nelioalves.cursomc.services.validation.ClienteInsert;
+import com.nelioalves.cursomc.services.validation.ClienteUpdate;
 
 /*
  * ANOTACAO CUSTOMIZADA CRIADA PARA VALIDAR CPF E CNPJ 
