@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,10 @@ public class Cliente implements Serializable{
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private Integer id;
+	
+	@Column(unique=true)
 	private String nome;
+	
 	private String email;
 	private String cpfCnpj;
 	//foi alterado de TipoCliente para Integer, para armazenar so o codigo, por isso mudamos o get e set deles
