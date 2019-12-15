@@ -100,6 +100,9 @@ public class ItemPedido implements Serializable{
 		return true;
 	}
 	
-	
+	//COMO TEM O get NA FRENTE DO NOME DO METODO O JSON JA SERIALIZA ELE NA RESPOTA
+	public Double getSubTotal() {
+		return (preco - desconto) * quantidade;
+	}
 	
 }
