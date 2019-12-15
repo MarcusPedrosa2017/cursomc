@@ -11,11 +11,14 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nelioalves.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 //essa anotacao serve para definir a estrategia da heranca que existe entre os filhos desta classe, ESTUDAR MAIS DEPOIS
 @Inheritance(strategy=InheritanceType.JOINED)
+//anotacao do JACKSON que sera usada para deteminar que esta classe tem uma propriedade adicional para as suas implementacoes
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable{	
 	
 	private static final long serialVersionUID = 1L;

@@ -2,9 +2,12 @@ package com.nelioalves.cursomc.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.nelioalves.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
+//essa anotacao e para tipificar esta classe, para que na serializacao o JSON saiba instanciala corretamente
+@JsonTypeName("PagamentoComCartao")
 public class PagamentoComCartao extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;
