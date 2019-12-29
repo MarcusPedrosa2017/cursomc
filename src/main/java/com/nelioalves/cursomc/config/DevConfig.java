@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.nelioalves.cursomc.services.DBService;
+import com.nelioalves.cursomc.services.EmailService;
+import com.nelioalves.cursomc.services.MockEmailService;
+import com.nelioalves.cursomc.services.SmtpEmailService;
 
 /*A ANOTACAO @Configuration INDICA QUE E UMA CLASSE DE CONFIGURACAO
  * E A ANOTACAO @Profile INDICA QUE PERTENCE A UM PROFILE ESPECIFICO QUE E DEFINIDO EM SEU ARQUIVO.PROPERTIES DE MESMO NOME
@@ -33,6 +36,11 @@ public class DevConfig {
 		dbService.instantiateTestDatabase();		
 		return true;
 	}
-
+	
+	/*BEAN CRIADO PARA QUE SE POSSA UTILIZAR O ENVIO DE EMAIL DE CONFIRMACAO DE PEDIDO NA CLASSE PedidoService*/
+	@Bean
+	public SmtpEmailService emailService() {
+		return new SmtpEmailService();
+	}
 	
 }
