@@ -38,6 +38,9 @@ public class Cliente implements Serializable{
 	//foi alterado de TipoCliente para Integer, para armazenar so o codigo, por isso mudamos o get e set deles
 	private Integer tipo;
 	
+	@JsonIgnore//para que não retorne a senha na consulta
+	private String senha;
+	
 	/*
 	@JsonManagedReference FOI RETIRADA DEPOIS PELO AUTOR, POIS EM REQUISICOES DO REST HOUVE PROBLEMAS, FOI RETIRADA E NO LADO QUE TEM
 	 *A ANOTACAO @BackReference FOI TRACADA PELA @JsonIgonore QUE FEZ O MESMO EFEITO
@@ -59,13 +62,14 @@ public class Cliente implements Serializable{
 	public Cliente() {		
 	}
 
-	public Cliente(Integer id, String nome, String email, String cpfCnpj, TipoCliente tipo) {
+	public Cliente(Integer id, String nome, String email, String cpfCnpj, TipoCliente tipo, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpfCnpj = cpfCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
+		this.senha = senha;
 	}	
 
 	public Integer getId() {
@@ -108,6 +112,14 @@ public class Cliente implements Serializable{
 	//recebe o enum e salva o codigo integer dele
 	public void setTipo(TipoCliente tipo) {
 		this.tipo = tipo.getCod();
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		senha = senha;
 	}
 
 	public List<Endereco> getEndrecos() {
