@@ -7,14 +7,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.nelioalves.cursomc.security.JWTAuthenticationFilter;
+import com.nelioalves.cursomc.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JWTUtil jwtUtil;
 	
 	//DEFINICAO DE QUAIS CONTEXTOS ESTARAO LIBERADOS	
 	private static final String[] PUBLIC_MATCHERS = {
@@ -54,8 +65,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			//PARA TODOS OUTROS NECESSITA AUTENTICACAO
 			.anyRequest().authenticated();
 		
+		//ADICIONANDO O FILTRO DO /LOGIN
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		
 		//COLOCAMOS ESSA CONFIGURACAO PARA QUE O SPRING SECURITY NAO CRIE SESSAO DE USUARIO E NAO POSSIBILITE O ATAQUE CSRF
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception{		
+		/*  este metodo esta sendo sobrescrito para que possamos indicar para o Spring qual o algoritmo de encriptacao vamos
+		 *  usar e qual UserDetail
+		 *  Injetamos a interface do Spring userDetailsService, porem ele ira automaticamente usar a implementacao do projeto
+		 *  para esta interface que e: userDetailsServiceImpl
+		 */
+		auth.userDetailsService(userDetailsService).passwordEncoder(this.bCryptPasswordEncoder());
 	}
 	
 	//NECESSARIO PARA PODER RECEBER REQUEST DE MULTIPLAS ORIGENS

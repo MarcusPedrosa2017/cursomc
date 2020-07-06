@@ -129,7 +129,7 @@ public class DBService {
 		Cliente cli1 = new Cliente(null, "Maria Silva", "##########", "36378912377", TipoCliente.PESSOA_FISICA, pe.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323","9383893"));
 		
-		Cliente cli2 = new Cliente(null, "Ana Costa", "marcusvinicius.pp@gmail.com", "16607471048", TipoCliente.PESSOA_FISICA, pe.encode("123"));
+		Cliente cli2 = new Cliente(null, "Ana Costa", "ana@gmail.com", "16607471048", TipoCliente.PESSOA_FISICA, pe.encode("123"));
 		cli2.addPerfil(Perfil.ADMIN);
 		cli1.getTelefones().addAll(Arrays.asList("9933363321","34252625"));
 		
