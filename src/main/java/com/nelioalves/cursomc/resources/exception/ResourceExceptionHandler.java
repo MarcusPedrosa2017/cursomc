@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.nelioalves.cursomc.services.exception.AuthorizationException;
 import com.nelioalves.cursomc.services.exception.DataIntegrityException;
 import com.nelioalves.cursomc.services.exception.ObjectsNotFoundException;
 
@@ -59,5 +60,14 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}	
 	
-	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
+		
+		Long currentDiteTime = System.currentTimeMillis();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");		
+		Date currentDate = new Date(currentDiteTime);
+		
+		StandardError error =  new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), currentDate);		
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}
 }

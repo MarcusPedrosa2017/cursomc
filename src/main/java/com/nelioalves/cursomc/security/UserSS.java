@@ -78,5 +78,10 @@ public class UserSS implements UserDetails{
 		//colocamos por default apenas porque nao queremos implementar isso agora
 		return true;
 	}
+
+	public boolean hasRole(Perfil perfil) {
+		//pegando o perfil fazendo casting para GrantedAuthority e verificando na lista se existe para ver se o usuario e ADMIN
+		return this.getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao())); 
+	}
 	
 }
