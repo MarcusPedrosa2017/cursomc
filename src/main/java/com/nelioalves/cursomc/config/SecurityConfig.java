@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,8 @@ import com.nelioalves.cursomc.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
+//esta anotacao permiti utilizar anotacoes nos metodos para fazer pre validacoes de perfis de acesso
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -43,8 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	//DEFINICAO DOS RECURSOS QUE SERAO PERMITIDOS APENAS GET
 	private static final String[] PUBLIC_MATCHERS_GET = {			
 			"/produtos/**",
-			"/categorias/**",
-			"/clientes/**"
+			"/categorias/**"			
+	};
+	
+	//DEFINICAO DOS RECURSOS QUE SERAO PERMITIDOS PARA USUARIOS NAO CADASTRADOS VIA POST
+	private static final String[] PUBLIC_MATCHERS_POST = {			
+			"/clientes/**"			
 	};
 	
 	//SOBRESCREVENDO O METODO DE CONFIGURACAO
@@ -59,10 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		//CHAMADA DO METODO corsConfigurationSource ABAIXO E DESABILITANDO A PROTECAO DE ATAQUES CSRF
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
-			//PERMITE OS CONTEXTOS DO VETOR ACIMA SEM AUTENTICACAO SOMENTE PARA REQUESTS DO TIPO GET
+			//PERMITE OS CONTEXTOS DO VETOR ABAIXO SEM AUTENTICACAO SOMENTE PARA REQUESTS DO TIPO GET
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-			//PERMITE OS CONTEXTOS DO VETOR ACIMA SEM AUTENTICACAO
+			//PERMITE OS CONTEXTOS DO VETOR ABAIXO SEM AUTENTICACAO
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			//PERMITE OS CONTEXTOS DO VETOR ABAIXO SEM AUTENTICACAO PARA POST 
+			.antMatchers(PUBLIC_MATCHERS_POST).permitAll()
 			//PARA TODOS OUTROS NECESSITA AUTENTICACAO
 			.anyRequest().authenticated();
 		
