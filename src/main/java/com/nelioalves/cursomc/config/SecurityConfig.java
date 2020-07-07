@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nelioalves.cursomc.security.JWTAuthenticationFilter;
+import com.nelioalves.cursomc.security.JWTAuthorizationFilter;
 import com.nelioalves.cursomc.security.JWTUtil;
 
 @Configuration
@@ -67,6 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		//ADICIONANDO O FILTRO DO /LOGIN
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		
+		//ADICIONANDO O FILTRO DO AUTORIZADOR
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		
 		//COLOCAMOS ESSA CONFIGURACAO PARA QUE O SPRING SECURITY NAO CRIE SESSAO DE USUARIO E NAO POSSIBILITE O ATAQUE CSRF
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
