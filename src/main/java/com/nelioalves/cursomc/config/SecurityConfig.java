@@ -51,8 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	//DEFINICAO DOS RECURSOS QUE SERAO PERMITIDOS PARA USUARIOS NAO CADASTRADOS VIA POST
 	private static final String[] PUBLIC_MATCHERS_POST = {			
-			"/clientes",
-			"/clientes/picture",
+			"/clientes",			
 			"/auth/forgot/**"	
 	};
 	
