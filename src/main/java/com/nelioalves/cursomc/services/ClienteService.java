@@ -1,5 +1,7 @@
 package com.nelioalves.cursomc.services;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,6 +51,16 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
+	
+	private static final String JPG_EXTENSION = ".jpeg";
+	
+	private static final String CONTENT_TYPE = "image";
 	
 	public ClienteService(ClienteRepository repo) {
 		this.repo = repo;
@@ -168,11 +181,22 @@ public class ClienteService {
 		if(user == null) {
 			throw new AuthorizationException("Acesso Negado");
 		}
-		URI uri = s3Service.uploadFile(multipartFile);
-		Cliente cli = repo.findByEmail(user.getUsername());
-		cli.setImageUrl(uri.toString());
-		repo.save(cli);
 		
-		return uri;
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		
+		String fileName = prefix + user.getId() + JPG_EXTENSION;
+		//utilizando o metodo que criamos no imageService
+		return s3Service.uploadFile(imageService.getInputStream(jpgImage, JPG_EXTENSION), fileName, CONTENT_TYPE);		
+		
+	}
+	
+	public URI uploadProfilePicture2(MultipartFile multipartFile) {
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		String fileName = prefix + user.getId();
+		return s3Service.uploadFilePatternName(multipartFile, fileName);
+		
 	}
 }

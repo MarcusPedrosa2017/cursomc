@@ -104,7 +104,8 @@ public class ClienteResource {
 	@RequestMapping(value="/picture", method=RequestMethod.POST)
 	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name="file") MultipartFile file){
 		
-		URI uri = service.uploadProfilePicture(file);	
+		//URI uri = service.uploadProfilePicture(file);
+		URI uri = service.uploadProfilePicture2(file);		
 		return ResponseEntity.created(uri).build();
 		
 	}
