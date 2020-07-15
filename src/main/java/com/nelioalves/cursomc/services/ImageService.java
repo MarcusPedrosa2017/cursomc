@@ -4,14 +4,15 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.io.FilenameUtils;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,11 +49,27 @@ public class ImageService {
 	public InputStream getInputStream(BufferedImage img, String extension) {
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			OutputStream out = new ByteArrayOutputStream();
-			ImageIO.write(img, extension, os);					
+			ImageIO.write(img, extension, os);			
 			return new ByteArrayInputStream(os.toByteArray());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new FileException("Erro ao ler arquivo");
 		}
 	}
+	
+	//funcao que recorta a imagem enviada para o formato de quadrado
+	public BufferedImage cropSquare(BufferedImage sourceImg) {
+		int min = (sourceImg.getHeight() <= sourceImg.getWidth()) ? sourceImg.getHeight() : sourceImg.getHeight();
+		return Scalr.crop(
+				sourceImg, 
+				(sourceImg.getWidth()/2 - (min/2)), 
+				(sourceImg.getHeight()/2 - (min/2)), 
+				min, 
+				min);
+	}
+	
+	//funcao que redimensiona o tamanho da imagem
+	public BufferedImage resize(BufferedImage sourceImg, int size) {
+		return Scalr.resize(sourceImg, Scalr.Method.ULTRA_QUALITY, size);
+	}
+	
 }

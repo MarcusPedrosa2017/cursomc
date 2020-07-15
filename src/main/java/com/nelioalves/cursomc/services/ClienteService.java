@@ -1,6 +1,7 @@
 package com.nelioalves.cursomc.services;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +32,11 @@ import com.nelioalves.cursomc.dto.ClienteNewDTO;
 import com.nelioalves.cursomc.repositories.CidadeRepository;
 import com.nelioalves.cursomc.repositories.ClienteRepository;
 import com.nelioalves.cursomc.repositories.EnderecoRepository;
+import com.nelioalves.cursomc.resources.utils.MultipartImage;
 import com.nelioalves.cursomc.security.UserSS;
 import com.nelioalves.cursomc.services.exception.AuthorizationException;
 import com.nelioalves.cursomc.services.exception.DataIntegrityException;
+import com.nelioalves.cursomc.services.exception.FileException;
 import com.nelioalves.cursomc.services.exception.ObjectsNotFoundException;
 
 @Service
@@ -57,6 +62,9 @@ public class ClienteService {
 	
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
+	
+	@Value("${img.profile.size}")
+	private Integer imageSize;
 	
 	private static final String JPG_EXTENSION = ".jpeg";
 	
@@ -183,10 +191,16 @@ public class ClienteService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		//recortando imagem
+		jpgImage = imageService.cropSquare(jpgImage);
+		//redimensionando imagem
+		jpgImage = imageService.resize(jpgImage, imageSize);
 		
 		String fileName = prefix + user.getId() + JPG_EXTENSION;
+		Integer size = jpgImage.getRaster().getDataBuffer().getSize();
+		
 		//utilizando o metodo que criamos no imageService
-		return s3Service.uploadFile(imageService.getInputStream(jpgImage, JPG_EXTENSION), fileName, CONTENT_TYPE);		
+		return s3Service.uploadFile(imageService.getInputStream(jpgImage, JPG_EXTENSION), fileName, CONTENT_TYPE, Long.valueOf(size.toString()) );		
 		
 	}
 	
@@ -195,8 +209,37 @@ public class ClienteService {
 		if(user == null) {
 			throw new AuthorizationException("Acesso Negado");
 		}
+		/*
+		//se for imagem recorta e redimensiona o arquivo
+		String extName = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+		if("jpeg".equals(extName) || "jpg".equals(extName) || "png".equals(extName)) {
+			BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+			//recortando imagem
+			jpgImage = imageService.cropSquare(jpgImage);
+			//redimensionando imagem
+			jpgImage = imageService.resize(jpgImage, imageSize);
+			//convertendo para MultipartFile
+			multipartFile = BufferedImageToMultipartFile(jpgImage, multipartFile.getOriginalFilename(), multipartFile.getName(),
+					multipartFile.getContentType(), jpgImage.getRaster().getDataBuffer().getSize());
+		}*/
+		
 		String fileName = prefix + user.getId();
 		return s3Service.uploadFilePatternName(multipartFile, fileName);
 		
+	}
+	
+	private MultipartFile BufferedImageToMultipartFile(BufferedImage jpgImage, String fileName, String name, String extension, long size) {
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write( jpgImage, extension, baos );
+			baos.flush();
+		} catch (IOException e) {
+			throw new FileException("Erro ao realizar conversao de BufferedImage para MultipartFile ");
+		}		
+
+		MultipartFile multipartFile = new MultipartImage(baos.toByteArray(), fileName, name, extension, size);
+		
+		return multipartFile;
 	}
 }

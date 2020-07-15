@@ -35,12 +35,14 @@ public class S3Service {
 			String fileName = multipartFile.getOriginalFilename();
 			InputStream is = multipartFile.getInputStream();
 			String contentType = multipartFile.getContentType();
-			return uploadFile(is, fileName, contentType);
+			Long lengthFile = multipartFile.getSize();
+			return uploadFile(is, fileName, contentType, lengthFile);
 		} catch (IOException e) {			
 			throw new FileException("Erro de IO: " + e.getMessage());
 		}
 
 	}
+	
 	
 	public URI uploadFilePatternName(MultipartFile multipartFile, String fileName) {
 
@@ -74,22 +76,8 @@ public class S3Service {
 		
 	}
 
-	public URI uploadFile(InputStream is, String fileName, String contentType) {
-
-		try {
-			ObjectMetadata meta = new ObjectMetadata();
-			meta.setContentType(contentType);
-			LOG.info("Iniciando Upload");
-			s3Client.putObject(new PutObjectRequest(bucketName, fileName, is, meta));
-			LOG.info("Finalizado Upload");
-			return s3Client.getUrl(bucketName, fileName).toURI();
-		} catch (URISyntaxException e) {
-			throw new FileException("Erro ao converter URL para URI");
-		}
-
-	}
 	public URI uploadFile(InputStream is, String fileName, String contentType, Long lengthFile) {
-		
+
 		try {
 			ObjectMetadata meta = new ObjectMetadata();
 			meta.setContentType(contentType);
@@ -101,6 +89,7 @@ public class S3Service {
 		} catch (URISyntaxException e) {
 			throw new FileException("Erro ao converter URL para URI");
 		}
-		
-	}
+
+	}	
+	
 }
