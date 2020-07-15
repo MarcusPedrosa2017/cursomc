@@ -31,6 +31,9 @@ public class AuthResource {
 		UserSS user = UserService.authenticated();
 		String token = jwtUtil.generateToken(user.getUsername());
 		response.addHeader("Authorization", "Bearer " + token);
+		//devido a estarmos utilizando um cabecario customizado pois colocamos a proriedade "Authorization" temos
+        //que abilitar isso para poder receber o Authorization no header ao consumir a aplicacao
+		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
 	}
 	
