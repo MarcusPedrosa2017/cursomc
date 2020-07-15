@@ -17,7 +17,7 @@ public class URL {
 		}
 		
 		return list;
-		//MESMO RTORNO USANDO LAMBDA
+		//mesmo retorno usando lambda
 		//return Arrays.asList(s.split(",")).stream().map(x -> Integer.parseInt(x.toString())).collect(Collectors.toList());
 	}
 	
