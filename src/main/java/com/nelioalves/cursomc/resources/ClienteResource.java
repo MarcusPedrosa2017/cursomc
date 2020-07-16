@@ -56,6 +56,12 @@ public class ClienteResource {
 		
 	}
 	
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<Cliente> find(@RequestParam(value="value") String email){
+		Cliente obj = service.findByEmail(email);		
+		return ResponseEntity.ok().body(obj);		
+	}
+	
 	/*
 	 * FOI INCLUIDA A ANOTACAO @Valid PARA PODER VALIDAR OS CAMPOS DE ACORDO COM AS ANOTAÇOES INCLUÍDAS NO DTO
 	 */

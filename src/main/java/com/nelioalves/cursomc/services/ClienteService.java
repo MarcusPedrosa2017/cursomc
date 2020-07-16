@@ -33,6 +33,7 @@ import com.nelioalves.cursomc.repositories.CidadeRepository;
 import com.nelioalves.cursomc.repositories.ClienteRepository;
 import com.nelioalves.cursomc.repositories.EnderecoRepository;
 import com.nelioalves.cursomc.resources.utils.MultipartImage;
+import com.nelioalves.cursomc.resources.utils.ValidacaoUtil;
 import com.nelioalves.cursomc.security.UserSS;
 import com.nelioalves.cursomc.services.exception.AuthorizationException;
 import com.nelioalves.cursomc.services.exception.DataIntegrityException;
@@ -78,6 +79,19 @@ public class ClienteService {
 		List<Cliente> lista = new ArrayList<>();
 		lista = repo.findAll();
 		return lista;
+	}
+	
+	public Cliente findByEmail(String email) {
+		
+		UserSS userSS = UserService.authenticated();
+		if(ValidacaoUtil.isNullOrBlankOrEmpty(userSS) || !userSS.hasRole(Perfil.ADMIN) && !email.equals(userSS.getUsername())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		Cliente obj = repo.findByEmail(email);
+		if(ValidacaoUtil.isNullOrBlankOrEmpty(obj)) {
+			throw new ObjectsNotFoundException("Objeto não encontrado ! Id: " + userSS.getId() + Cliente.class.getName());
+		}
+		return obj;
 	}
 	
 	public Cliente find(Integer id) {
