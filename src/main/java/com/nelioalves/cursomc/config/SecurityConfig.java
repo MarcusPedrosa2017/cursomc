@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	//DEFINICAO DOS RECURSOS QUE SERAO PERMITIDOS APENAS GET
 	private static final String[] PUBLIC_MATCHERS_GET = {			
 			"/produtos/**",
-			"/categorias/**"			
+			"/categorias/**",
+			"/estados/**"
 	};
 	
 	//DEFINICAO DOS RECURSOS QUE SERAO PERMITIDOS PARA USUARIOS NAO CADASTRADOS VIA POST
