@@ -97,11 +97,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(userDetailsService).passwordEncoder(this.bCryptPasswordEncoder());
 	}
 	
-	//NECESSARIO PARA PODER RECEBER REQUEST DE MULTIPLAS ORIGENS
+	//necessario para poder receber request de multiplas orgines(redes)
 	@Bean
 	CorsConfigurationSource corsConfigurationSource(){
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		//colocando os metodos permitdos para que nao ocorra problemas ao realizar PUT e DELETE
+		//devido ao cabecalho customizado "Authorization"
+		configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONAL"));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
 	
