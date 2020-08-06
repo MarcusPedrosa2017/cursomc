@@ -1,8 +1,5 @@
 package com.nelioalves.cursomc.resources.exception;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -58,10 +55,10 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
 		
-		StandardError error =  new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso Negado" , e.getMessage()
+		StandardError error =  new StandardError(System.currentTimeMillis(), HttpStatus.UNAUTHORIZED.value(), "Acesso Negado" , e.getMessage()
 				, request.getRequestURI());		
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
-	}
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+	}	
 	
 	@ExceptionHandler(FileException.class)
 	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request){
